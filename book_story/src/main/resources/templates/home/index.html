@@ -9,8 +9,28 @@
 </head>
 <body>
 <section layout:fragment="content">
-    <h1>Hello World</h1>
-    <p>This is a paragraph from the content page</p>
+    <div class="row">
+        <ul class="nav nav-tabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-toggle="tab" href="#tab1">신간 도서</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="tab" href="#tab2">베스트셀러</a>
+            </li>
+        </ul>
+    </div>
+    <div class="row">
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab1">
+                <!-- Tab 1 content -->
+                hello
+            </div>
+            <div class="tab-pane fade" id="tab2">
+                <!-- Tab 2 content -->
+                world
+            </div>
+        </div>
+    </div>
 </section>
 </body>
 </html>
