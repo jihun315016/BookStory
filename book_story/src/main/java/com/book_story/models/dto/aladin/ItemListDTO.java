@@ -1,4 +1,4 @@
-package com.book_story.models.dto;
+package com.book_story.models.dto.aladin;
 
 import lombok.Getter;
 import lombok.ToString;
@@ -24,26 +24,6 @@ public class ItemListDTO {
     // 겸색 결과 - 디테일(책 리스트)
     @JsonProperty("item")
     List<ItemListElement> item;
-}
-
-
-@Getter
-class ItemListCondition {
-    private String ttbkey;
-
-    private String queryType;
-
-    private String cover;
-
-    private int maxResult;
-
-    private int start;
-
-    private String searchTarget;
-
-    private String output;
-
-    private String version;
 }
 
 

@@ -15,7 +15,8 @@ public class HomeController {
 
     @GetMapping("/")
     public String Index() throws IOException {
-        homeService.findData();
+        //ItemListDTO itemListDTO =
+                homeService.findData();
         return "home/index";
     }
 }
