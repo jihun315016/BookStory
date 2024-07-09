@@ -2,25 +2,28 @@ package com.book_story.models.dto.aladin;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 @Builder
 @Getter
+@Setter
 @ToString
 public class ItemListCondition {
-    private String ttbkey;
+    // 요청하는 파라미터 대소문자가 뒤죽박죽
+    private String TTBKey;
 
-    private String queryType;
+    private String QueryType;
 
-    private String cover;
+    private String SearchTarget;
 
-    private int maxResult;
+    private int MaxResults;
 
-    private int start;
+    private int Start;
 
-    private String searchTarget;
+    private String Cover;
 
-    private String output;
+    private String Output;
 
-    private String version;
+    private String Version;
 }
