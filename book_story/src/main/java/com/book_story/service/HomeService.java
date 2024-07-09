@@ -1,28 +1,31 @@
 package com.book_story.service;
 
 import com.book_story.models.dto.aladin.ItemListCondition;
+import com.book_story.models.dto.aladin.ItemListDTO;
+import com.book_story.models.dto.aladin.RequestData;
 import com.book_story.models.entity.CommonCode;
 import com.book_story.repository.CommonCodeRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Collectors;
+
+import com.book_story.common.Utility;
 
 @Service
 @RequiredArgsConstructor
 public class HomeService {
     private final CommonCodeRepository commonCodeRepository;
-    private static final String URL = "url";
-    private static final String METHOD = "GET";
-    private static final String USER_AGENT = "Mozilla/5.0";
 
+    @Value("${aladin.apikey}")
+    private String apiKey;
 
-    public void findData() throws IOException {
+    public List<ItemListDTO> findData() throws IOException {
         List<CommonCode> commonCodeList = commonCodeRepository.findByCodeGroup("Aladin-ItemList");
 
         BiFunction<List<CommonCode>, String, String> getNameLambda = (list, str) -> {
@@ -33,37 +36,36 @@ public class HomeService {
         };
 
         ItemListCondition condition = ItemListCondition.builder()
-                .queryType(getNameLambda.apply(commonCodeList, "QueryType"))
-                .maxResult(Integer.parseInt(getNameLambda.apply(commonCodeList, "MaxResults")))
-                .searchTarget(getNameLambda.apply(commonCodeList, "SearchTarget"))
-                .output(getNameLambda.apply(commonCodeList, "output"))
-                .version(getNameLambda.apply(commonCodeList, "Version"))
-                .cover(getNameLambda.apply(commonCodeList, "Cover"))
+                .TTBKey(apiKey)
+                .QueryType(getNameLambda.apply(commonCodeList, "QueryType"))
+                .MaxResults(Integer.parseInt(getNameLambda.apply(commonCodeList, "MaxResults")))
+                .SearchTarget(getNameLambda.apply(commonCodeList, "SearchTarget"))
+                .Output(getNameLambda.apply(commonCodeList, "output"))
+                .Version(getNameLambda.apply(commonCodeList, "Version"))
+                .Cover(getNameLambda.apply(commonCodeList, "Cover"))
                 .build();
 
-        // ItemListCondition(ttbkey=null, queryType=ItemNewAll, cover=Big, maxResult=6, start=0, searchTarget=Book, output=js, version=20131101)
-        System.out.println(condition);
+        List<ItemListDTO> list = new ArrayList<>();
 
+        Map<String, String> map = Utility.getMapByClass(condition);
 
-//        // URL 연결 객체 가져오기
-//        URL url = new URL(URL);
-//        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//
-//        // 요청 메서드, 헤더 설정
-//        connection.setRequestMethod(METHOD);
-//        connection.setRequestProperty("User-Agent", USER_AGENT);
-//
-//        // 응답 코드 가져오기, 성공 시 200 반환
-//        int responseCode = connection.getResponseCode();
-//
-//        // 응답 데이터를 읽을 수 있는 InputStream 객체 가져오기
-//        InputStream InputStream = connection.getInputStream();
-//        InputStreamReader inputStreamReader = new InputStreamReader(InputStream, "UTF-8");
-//        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-//        String inputLine = bufferedReader.readLine();
-//
-//        Gson gson = new Gson();
-//        ItemListDTO itemListDTO = gson.fromJson(inputLine, ItemListDTO.class);
-//        return itemListDTO;
+        String urlParam =  Utility.getUrlParameterFormat(map);
+        String baseUrl = "http://www.aladin.co.kr/ttb/api/ItemList.aspx?";
+
+        RequestData requestData = RequestData.builder()
+                .url(baseUrl + urlParam)
+                .method("GET")
+                .userAgent("Mozilla/5.0")
+                .build();
+
+        list.add(Utility.<ItemListDTO>getRequest(requestData, ItemListDTO.class));
+
+        condition.setQueryType("ItemNewAll");
+        map = Utility.getMapByClass(condition);
+        urlParam =  Utility.getUrlParameterFormat(map);
+        requestData.setUrl(baseUrl + urlParam);
+        list.add(Utility.<ItemListDTO>getRequest(requestData, ItemListDTO.class));
+
+        return list;
     }
 }
