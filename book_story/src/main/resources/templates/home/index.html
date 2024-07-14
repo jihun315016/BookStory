@@ -7,29 +7,54 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+
+    <link href="/my/card.css" rel="stylesheet">
 </head>
 <body>
 <section layout:fragment="content">
-    <div th:each="i : ${data.get(0).item}">
-        <p th:text="${i.title}"></p>
-        <p th:text="${i.author}"></p>
-        <p th:text="${i.publisher}"></p>
-        <p th:text="${i.pubDate}"></p>
-        <p th:text="${i.categoryName}"></p>
-        <p th:text="${i.cover}"></p>
-        <p>=====</p>
-    </div>
-
-    <h3>==================================================</h3>
-
-    <div th:each="i : ${data.get(1).item}">
-        <p th:text="${i.title}"></p>
-        <p th:text="${i.author}"></p>
-        <p th:text="${i.publisher}"></p>
-        <p th:text="${i.pubDate}"></p>
-        <p th:text="${i.categoryName}"></p>
-        <p th:text="${i.cover}"></p>
-        <p>=====</p>
+    <div class="form-container">
+        <div class="row">
+            <ul class="nav nav-tabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-toggle="tab" href="#tab1">베스트셀러</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-toggle="tab" href="#tab2">신간 도서</a>
+                </li>
+            </ul>
+        </div>
+        <div class="row">
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="tab1">
+                    <!-- Tab 1 content 베스트셀러 -->
+                    <div class="row">
+                        <div class="col-md-4" th:each="i : ${data.get(0).item}">
+                            <div class="card">
+                                <img th:src="${i.cover}" alt="bookcover" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${i.title}"></h5>
+                                    <p class="card-text text-truncate" th:text="${i.author}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab2">
+                    <!-- Tab 2 content 신간 도서 -->
+                    <div class="row">
+                        <div class="col-md-4" th:each="i : ${data.get(1).item}">
+                            <div class="card">
+                                <img th:src="${i.cover}" alt="bookcover" class="card-img-top">
+                                <div class="card-body">
+                                    <h5 class="card-title" th:text="${i.title}"></h5>
+                                    <p class="card-text text-truncate" th:text="${i.author}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 </body>

@@ -1,0 +1,25 @@
+@charset "UTF-8";
+
+.card {
+    height: 100%;
+}
+
+.card-img-top {
+    height: 300px;
+    object-fit: contain;
+}
+
+.card-title {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-text.text-truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

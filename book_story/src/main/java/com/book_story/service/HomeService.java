@@ -62,6 +62,10 @@ public class HomeService {
 
         condition.setQueryType("ItemNewAll");
         map = Utility.getMapByClass(condition);
+
+        urlParam =  Utility.getUrlParameterFormat(map);
+        requestData.setUrl(baseUrl + urlParam);
+
         list.add(Utility.<ItemListDTO>getRequest(requestData, ItemListDTO.class));
 
         return list;
