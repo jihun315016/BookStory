@@ -27,10 +27,10 @@ public class Review {
     @Column(name = "isbn13")
     private String isbn13;
 
-    @Column(name = "categor_id")
+    @Column(name = "category_id")
     private String categoryId;
 
-    @Column(name = "categor_name")
+    @Column(name = "category_name")
     private String categoryName;
 
     @Column(name = "user_id")

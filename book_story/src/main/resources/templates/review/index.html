@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout.html}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="/my/table.css" rel="stylesheet">
+</head>
+<body>
+<section layout:fragment="content">
+    <table class="table">
+        <thead>
+        <tr>
+            <th>글 제목</th>
+            <th>도서명</th>
+            <th>작성자</th>
+            <th>작성 날짜</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <div th:each="i : ${data}">
+            <tr>
+                <td>
+                    <div class="text-truncate max-width50" th:text="${i.title}">
+<!--                        @Html.ActionLink(item.Title, "Read", "Review", new { id = item.Id }, new { @class = "custom-link" })-->
+
+                    </div>
+                </td>
+                <td><div class="text-truncate max-width40" th:text="${i.bookName}"></div></td>
+                <td><div class="text-truncate max-width30" th:text="${i.UserId}"></div></td>
+                <td><div class="text-truncate max-width30" th:text="${i.CreateDate}"></div></td>
+            </tr>
+        </div>
+        </tbody>
+    </table>
+</section>
+</body>
+</html>
