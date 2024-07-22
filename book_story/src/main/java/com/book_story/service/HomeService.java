@@ -36,13 +36,13 @@ public class HomeService {
         };
 
         ItemListCondition condition = ItemListCondition.builder()
-                .TTBKey(apiKey)
-                .QueryType(getNameLambda.apply(commonCodeList, "QueryType"))
-                .MaxResults(Integer.parseInt(getNameLambda.apply(commonCodeList, "MaxResults")))
-                .SearchTarget(getNameLambda.apply(commonCodeList, "SearchTarget"))
-                .Output(getNameLambda.apply(commonCodeList, "output"))
-                .Version(getNameLambda.apply(commonCodeList, "Version"))
-                .Cover(getNameLambda.apply(commonCodeList, "Cover"))
+                .ttbkey(apiKey)
+                .queryType(getNameLambda.apply(commonCodeList, "QueryType"))
+                .maxResults(Integer.parseInt(getNameLambda.apply(commonCodeList, "MaxResults")))
+                .searchTarget(getNameLambda.apply(commonCodeList, "SearchTarget"))
+                .output(getNameLambda.apply(commonCodeList, "output"))
+                .version(getNameLambda.apply(commonCodeList, "Version"))
+                .cover(getNameLambda.apply(commonCodeList, "Cover"))
                 .build();
 
         List<ItemListDTO> list = new ArrayList<>();

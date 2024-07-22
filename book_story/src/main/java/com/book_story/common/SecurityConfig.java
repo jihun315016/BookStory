@@ -31,10 +31,13 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         // CSRF 활성화 설정
+//        httpSecurity.csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository())
+//                .ignoringRequestMatchers("/account/login")
+//        );
         httpSecurity.csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository())
-                .ignoringRequestMatchers("/account/login")
+                .ignoringRequestMatchers("/user", "/account/login")
         );
-        
+
         // 인증 설정
         httpSecurity.authorizeHttpRequests(
                 authorize -> authorize.requestMatchers("/**").permitAll()
@@ -44,7 +47,7 @@ public class SecurityConfig {
         httpSecurity.formLogin(
                 login -> login.loginPage("/login")
                         .defaultSuccessUrl("/")
-                        .failureUrl("/account/login?error")
+                        .failureUrl("/login?error")
         );
 
         // 로그아웃 설정

@@ -10,20 +10,19 @@ import lombok.ToString;
 @Setter
 @ToString
 public class ItemListCondition {
-    // 요청하는 파라미터 대소문자가 뒤죽박죽
-    private String TTBKey;
+    private String ttbkey;
 
-    private String QueryType;
+    private String queryType;
 
-    private String SearchTarget;
+    private String searchTarget;
 
-    private int MaxResults;
+    private int maxResults;
 
-    private int Start;
+    private int start;
 
-    private String Cover;
+    private String cover;
 
-    private String Output;
+    private String output;
 
-    private String Version;
+    private String version;
 }
