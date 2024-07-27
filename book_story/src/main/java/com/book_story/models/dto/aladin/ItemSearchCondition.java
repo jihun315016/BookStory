@@ -5,17 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
 @Builder
 @Getter
 @Setter
 @ToString
-public class ItemListCondition {
+public class ItemSearchCondition {
     private String ttbkey;
+
+    private String query;
 
     private String queryType;
 

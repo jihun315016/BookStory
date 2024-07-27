@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout.html}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="/my/card.css" rel="stylesheet">
+</head>
+<body>
+<section layout:fragment="content">
+    <div class="form-container">
+        <div class="row">
+            <div class="col-md-4" th:each="i : ${data.item}">
+                <div class="card">
+                    <img th:src="${i.cover}" alt="bookcover" class="card-img-top">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${i.title}"></h5>
+                        <p class="card-text text-truncate" th:text="${i.author}"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+</body>
+</html>
