@@ -2,6 +2,8 @@ package com.book_story.common;
 
 import io.micrometer.common.util.StringUtils;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import com.book_story.models.dto.aladin.RequestData;
@@ -40,25 +42,6 @@ public class Utility {
     }
 
 
-    // GET 요청에서 url parameter 문자열 생성
-    // -> 키1=값1&키2=값2 ...
-    public static String getUrlParameterFormat(Map<String, String> map) {
-        Iterator<String> keys = map.keySet().iterator();
-        String strKey, strValue;
-        List<String> list = new ArrayList<>();
-
-        while (keys.hasNext()) {
-            strKey = keys.next();
-            strValue = map.get(strKey);
-            if (!StringUtils.isBlank(strValue)) {
-                list.add(strKey + "=" + spacingprocessing(strValue));
-            }
-        }
-
-        return String.join("&", list);
-    }
-
-
     public static <T> T getRequest(RequestData requestData, Class<T> clazz) throws MalformedURLException, IOException {
         // URL 연결 객체 가져오기
         URL url = new URL(requestData.getUrl());
@@ -82,6 +65,27 @@ public class Utility {
         T result = gson.fromJson(inputLine, clazz);
         return result;
     }
+
+
+    // GET 요청에서 url parameter 문자열 생성
+    // -> 키1=값1&키2=값2 ...
+    public static String getUrlParameterFormat(Map<String, String> map) {
+        Iterator<String> keys = map.keySet().iterator();
+        String strKey, strValue;
+        List<String> list = new ArrayList<>();
+
+        while (keys.hasNext()) {
+            strKey = keys.next();
+            strValue = map.get(strKey);
+            if (!StringUtils.isBlank(strValue)) {
+                strValue = URLEncoder.encode(strValue, StandardCharsets.UTF_8);
+                list.add(strKey + "=" + spacingprocessing(strValue));
+            }
+        }
+
+        return String.join("&", list);
+    }
+
 
     // 문자열 띄어쓰기 검사
     // -> 공백은 %20으로 바꾸어 준다.
