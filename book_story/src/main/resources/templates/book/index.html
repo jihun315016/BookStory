@@ -9,22 +9,57 @@
     <title>Title</title>
 
     <link href="/my/card.css" rel="stylesheet">
+    <link href="/my/mystyle.css" rel="stylesheet">
 </head>
 <body>
 <section layout:fragment="content">
     <div class="form-container">
+        <div class="input-group">
+            <input type="text" id="searchText" class="form-control margin-right-10" placeholder="도서 검색" name="searchText" aria-label="도서 검색">
+            <button class="btn btn-dark" type="submit" onclick="txtSearch_onClick()">검색</button>
+        </div>
+
         <div class="row">
-            <div class="col-md-4" th:each="i : ${data.item}">
-                <div class="card">
-                    <img th:src="${i.cover}" alt="bookcover" class="card-img-top">
-                    <div class="card-body">
-                        <h5 class="card-title" th:text="${i.title}"></h5>
-                        <p class="card-text text-truncate" th:text="${i.author}"></p>
+            <div th:if="${data != null}">
+                <div class="col-md-4" th:each="i : ${data.item}">
+                    <div class="card">
+                        <img th:src="${i.cover}" alt="bookcover" class="card-img-top">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="${i.title}"></h5>
+                            <p class="card-text text-truncate" th:text="${i.author}"></p>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+
+    <Script>
+        var searchText = "";
+        var page = 1;
+    
+        txtSearch_onClick = function() {
+            searchText = document.getElementById('searchText').value;
+            page = 1;
+            const path = `/bookSearch?searchText=${encodeURIComponent(searchText)}&page=${encodeURIComponent(page)}`;
+
+            fetch(path, { method: 'GET' })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response;
+                })
+                .then((a) => {
+                    console.log(a);
+                    alert("hello world");
+                })
+                .catch(error => {
+                    console.error('Fetch error: ', error);
+                    alert('문제가 발생했습니다. 다시 시도해 주세요.');
+                });
+        }
+    </Script>
 </section>
 </body>
 </html>
