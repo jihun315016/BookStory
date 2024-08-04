@@ -3,7 +3,6 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{common/layout.html}">
-
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
@@ -12,6 +11,7 @@
     <link href="/my/mystyle.css" rel="stylesheet">
 </head>
 <body>
+
 <section layout:fragment="content">
     <div class="form-container">
         <div class="input-group">
@@ -20,45 +20,101 @@
         </div>
 
         <div class="row">
-            <div th:if="${data != null}">
-                <div class="col-md-4" th:each="i : ${data.item}">
-                    <div class="card">
-                        <img th:src="${i.cover}" alt="bookcover" class="card-img-top">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${i.title}"></h5>
-                            <p class="card-text text-truncate" th:text="${i.author}"></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div id="card-container"></div>
+        </div>
+
+        <div class="row">
+            <nav id="pagination-nav" aria-label="Page navigation">
+                <ul class="pagination">
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                </ul>
+            </nav>
         </div>
     </div>
 
     <Script>
         var searchText = "";
         var page = 1;
-    
-        txtSearch_onClick = function() {
+
+        var txtSearch_onClick = function() {
             searchText = document.getElementById('searchText').value;
             page = 1;
             const path = `/bookSearch?searchText=${encodeURIComponent(searchText)}&page=${encodeURIComponent(page)}`;
 
             fetch(path, { method: 'GET' })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
+                .then(data => {
+                    if (!data.ok) {
+                        throw new Error(`HTTP error! status: ${data.status}`);
                     }
-                    return response;
+                    return data.text();
                 })
-                .then((a) => {
-                    console.log(a);
-                    alert("hello world");
+                .then(data => {
+                    let item = JSON.parse(data).data.item
+                    setBooks(item)
+
+                    let page = JSON.parse(data).pagination
+                    setPage(page)
                 })
                 .catch(error => {
                     console.error('Fetch error: ', error);
                     alert('문제가 발생했습니다. 다시 시도해 주세요.');
                 });
         }
+
+
+        var setBooks = function(item) {
+            const cardContainer = document.getElementById('card-container');
+            cardContainer.innerHTML = '';
+
+            for (var i = 0; i < item.length; i++) {
+                const cardItem = document.createElement('div');
+                cardItem.classList.add('col-md-4');
+
+                const cardList = document.createElement('div');
+                cardList.classList.add('card');
+
+                const cardImage = document.createElement('img');
+                cardImage.classList.add('card-img-top');
+                cardImage.setAttribute('src', item[i].cover);
+                cardImage.setAttribute('alt', 'bookcover');
+
+                const cardBody = document.createElement('div');
+                cardBody.classList.add('card-body');
+
+                const cardTitle = document.createElement('h5');
+                cardTitle.classList.add('card-title');
+                cardTitle.textContent = item[i].title;
+
+                const cardAuthor = document.createElement('p');
+                cardAuthor.classList.add('card-text', 'text-truncate');
+                cardAuthor.textContent = item[i].author;
+
+                cardBody.appendChild(cardTitle);
+                cardBody.appendChild(cardAuthor);
+
+                cardList.appendChild(cardImage);
+                cardList.appendChild(cardBody);
+
+                cardItem.appendChild(cardList);
+                cardContainer.appendChild(cardItem);
+            }
+        }
+
+        var setPage = function(page) {
+            console.log(page);
+            const paginationNav = document.getElementById('pagination-nav');
+            const paginationUl = document.createElement('ul');
+            
+       
+            // <ul class="pagination">
+            //     <li class="page-item"><a class="page-link" href="#">1</a></li>
+            //     <li class="page-item"><a class="page-link" href="#">2</a></li>
+            //     <li class="page-item"><a class="page-link" href="#">3</a></li>
+            // </ul>
+        }
+
     </Script>
 </section>
 </body>

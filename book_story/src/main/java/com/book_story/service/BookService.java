@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.function.BiFunction;
 
 import com.book_story.common.Utility;
+import com.book_story.models.dto.Pagination;
 import com.book_story.models.dto.aladin.*;
 import com.book_story.models.entity.CommonCode;
 import com.book_story.repository.CommonCodeRepository;
@@ -17,7 +18,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Service
 public class BookService {
-    private final CommonCodeRepository commonCodeRepository;
+    private final CommonCodeService commonCodeService;
 
     @Value("${aladin.apikey}")
     private String apiKey;
@@ -79,23 +80,30 @@ public class BookService {
     }
 
 
+    public Pagination getPagination(ItemSearchDTO dto) {
+        List<CommonCode> commonCodeList =  commonCodeService.findByCodeGroup("Pagenation");
+        Pagination pagination = Pagination.builder()
+                .currentPage(dto.getStartIndex())
+                .itemsPerPage(dto.getItemsPerPage())
+                .totalPage((int)Math.ceil((double)dto.getTotalResults() / dto.getItemsPerPage()))
+                .pagesPerView(Integer.parseInt(commonCodeService.getCommonCode(commonCodeList, "PagesPerView")))
+                .build();
+
+        return pagination;
+    }
+
+
     private ItemListCondition setDefaultItemListCondition() {
-        List<CommonCode> commonCodeList = commonCodeRepository.findByCodeGroup("Aladin-ItemList");
-        BiFunction<List<CommonCode>, String, String> getNameLambda = (list, str) -> {
-            return list.stream()
-                    .filter(l -> l.getCode().equals(str))
-                    .map(c -> (CommonCode) c)
-                    .findFirst().get().getName();
-        };
+        List<CommonCode> commonCodeList = commonCodeService.findByCodeGroup("Aladin-ItemList");
 
         ItemListCondition condition = ItemListCondition.builder()
                 .ttbkey(apiKey)
-                .queryType(getNameLambda.apply(commonCodeList, "QueryType"))
-                .maxResults(Integer.parseInt(getNameLambda.apply(commonCodeList, "MaxResults")))
-                .searchTarget(getNameLambda.apply(commonCodeList, "SearchTarget"))
-                .output(getNameLambda.apply(commonCodeList, "output"))
-                .version(getNameLambda.apply(commonCodeList, "Version"))
-                .cover(getNameLambda.apply(commonCodeList, "Cover"))
+                .queryType(commonCodeService.getCommonCode(commonCodeList, "QueryType"))
+                .maxResults(Integer.parseInt(commonCodeService.getCommonCode(commonCodeList, "MaxResults")))
+                .searchTarget(commonCodeService.getCommonCode(commonCodeList, "SearchTarget"))
+                .output(commonCodeService.getCommonCode(commonCodeList, "output"))
+                .version(commonCodeService.getCommonCode(commonCodeList, "Version"))
+                .cover(commonCodeService.getCommonCode(commonCodeList, "Cover"))
                 .build();
 
         return condition;
@@ -103,23 +111,17 @@ public class BookService {
 
 
     private ItemSearchCondition setDefaultItemSearchCondition(String searchText) {
-        List<CommonCode> commonCodeList = commonCodeRepository.findByCodeGroup("Aladin-ItemSearch");
-        BiFunction<List<CommonCode>, String, String> getNameLambda = (list, str) -> {
-            return list.stream()
-                    .filter(l -> l.getCode().equals(str))
-                    .map(c -> (CommonCode) c)
-                    .findFirst().get().getName();
-        };
+        List<CommonCode> commonCodeList = commonCodeService.findByCodeGroup("Aladin-ItemSearch");
 
         ItemSearchCondition condition = ItemSearchCondition.builder()
                 .ttbkey(apiKey)
                 .query(searchText)
-                .queryType(getNameLambda.apply(commonCodeList, "QueryType"))
-                .maxResults(Integer.parseInt(getNameLambda.apply(commonCodeList, "MaxResults")))
-                .searchTarget(getNameLambda.apply(commonCodeList, "SearchTarget"))
-                .output(getNameLambda.apply(commonCodeList, "output"))
-                .version(getNameLambda.apply(commonCodeList, "Version"))
-                .cover(getNameLambda.apply(commonCodeList, "Cover"))
+                .queryType(commonCodeService.getCommonCode(commonCodeList, "QueryType"))
+                .maxResults(Integer.parseInt(commonCodeService.getCommonCode(commonCodeList, "MaxResults")))
+                .searchTarget(commonCodeService.getCommonCode(commonCodeList, "SearchTarget"))
+                .output(commonCodeService.getCommonCode(commonCodeList, "output"))
+                .version(commonCodeService.getCommonCode(commonCodeList, "Version"))
+                .cover(commonCodeService.getCommonCode(commonCodeList, "Cover"))
                 .build();
 
         return condition;

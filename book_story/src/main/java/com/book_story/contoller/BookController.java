@@ -2,10 +2,11 @@ package com.book_story.contoller;
 
 import java.io.IOException;
 
+import com.book_story.models.dto.PagedData;
+import com.book_story.models.dto.Pagination;
 import com.book_story.models.dto.aladin.ItemSearchDTO;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.StringUtils;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,13 +27,17 @@ public class BookController {
 
     @ResponseBody
     @GetMapping("/bookSearch")
-    public ItemSearchDTO index(Model model, @RequestParam(required = false) String searchText, int page) throws IOException {
+    public PagedData index(Model model, @RequestParam(required = false) String searchText, int page) throws IOException {
         ItemSearchDTO data = new ItemSearchDTO();
-        if (StringUtils.hasText(searchText)) {
-            data = bookService.itemSearch(searchText);
-            model.addAttribute("data", data);
-        }
 
-        return data;
+        data = bookService.itemSearch(searchText);
+        Pagination pagination = bookService.getPagination(data);
+
+        PagedData pagedData = PagedData.builder()
+                .pagination(pagination)
+                .data(data)
+                .build();
+
+        return pagedData;
     }
 }
