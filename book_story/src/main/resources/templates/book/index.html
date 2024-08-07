@@ -9,6 +9,7 @@
 
     <link href="/my/card.css" rel="stylesheet">
     <link href="/my/mystyle.css" rel="stylesheet">
+    <link href="/my/pagination.css" rel="stylesheet">
 </head>
 <body>
 
@@ -24,13 +25,11 @@
         </div>
 
         <div class="row">
-            <nav id="pagination-nav" aria-label="Page navigation">
-                <ul class="pagination">
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                </ul>
-            </nav>
+            <div class="center-outer">
+                <div class="center-inner">
+                    <nav id="pagination-nav" aria-label="Page navigation"></nav>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -41,6 +40,12 @@
         var txtSearch_onClick = function() {
             searchText = document.getElementById('searchText').value;
             page = 1;
+            execPagination(searchText, page);
+        }
+
+
+        var execPagination = function(searchText, selectedPage) {
+            page = selectedPage;
             const path = `/bookSearch?searchText=${encodeURIComponent(searchText)}&page=${encodeURIComponent(page)}`;
 
             fetch(path, { method: 'GET' })
@@ -102,19 +107,53 @@
             }
         }
 
-        var setPage = function(page) {
-            console.log(page);
+
+        var setPage = function(pageObj) {
             const paginationNav = document.getElementById('pagination-nav');
-            const paginationUl = document.createElement('ul');
+            const ulElement = document.createElement('ul');
+            ulElement.classList.add('pagination');
+
+            paginationNav.innerHTML = '';
             
-       
-            // <ul class="pagination">
-            //     <li class="page-item"><a class="page-link" href="#">1</a></li>
-            //     <li class="page-item"><a class="page-link" href="#">2</a></li>
-            //     <li class="page-item"><a class="page-link" href="#">3</a></li>
-            // </ul>
+            if (pageObj.startPage > 1) {
+                const liElementPrevious = createPageElement(searchText, pageObj.startPage - 1, 'Previous');
+                ulElement.appendChild(liElementPrevious);
+            }
+
+            for (var i = pageObj.startPage; i < pageObj.endPage + 1; i++) {
+                const liElement = createPageElement(searchText, i, i);
+                // const liElement = document.createElement('li');
+                // liElement.classList.add('page-link');
+                // liElement.innerHTML = i;
+                
+                // // 클릭 이벤트 추가
+                // liElement.addEventListener('click', function() {
+                //     execPagination(searchText, this.innerHTML);
+                // });
+
+                ulElement.appendChild(liElement);
+            }
+
+            if (pageObj.totalPage > pageObj.endPage) {
+                const liElementNext = createPageElement(searchText, pageObj.endPage + 1, 'Next');
+                ulElement.appendChild(liElementNext);
+            }
+            paginationNav.appendChild(ulElement);
         }
 
+        
+        var createPageElement = function(searchText, page, caption) {
+            const liElement = document.createElement('li');
+                liElement.classList.add('page-link');
+                liElement.innerHTML = caption;
+                
+                // 클릭 이벤트 추가
+                liElement.addEventListener('click', function() {
+                    execPagination(searchText, page);
+                });
+
+                return liElement;
+        }
     </Script>
 </section>
 </body>

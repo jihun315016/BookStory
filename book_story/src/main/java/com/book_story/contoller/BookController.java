@@ -29,8 +29,7 @@ public class BookController {
     @GetMapping("/bookSearch")
     public PagedData index(Model model, @RequestParam(required = false) String searchText, int page) throws IOException {
         ItemSearchDTO data = new ItemSearchDTO();
-
-        data = bookService.itemSearch(searchText);
+        data = bookService.itemSearch(searchText, page);
         Pagination pagination = bookService.getPagination(data);
 
         PagedData pagedData = PagedData.builder()

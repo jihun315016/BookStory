@@ -64,8 +64,9 @@ public class BookService {
     }
 
 
-    public ItemSearchDTO itemSearch(String searchText) throws IOException {
+    public ItemSearchDTO itemSearch(String searchText, int page) throws IOException {
         ItemSearchCondition condition = setDefaultItemSearchCondition(searchText);
+        condition.setStart(page);
         Map<String, String> map = Utility.getMapByClass(condition);
         String urlParam = Utility.getUrlParameterFormat(map);
         String baseUrl = "http://www.aladin.co.kr/ttb/api/ItemSearch.aspx?";
@@ -82,12 +83,25 @@ public class BookService {
 
     public Pagination getPagination(ItemSearchDTO dto) {
         List<CommonCode> commonCodeList =  commonCodeService.findByCodeGroup("Pagenation");
+        int index = (dto.getStartIndex() % 5 == 0) ? dto.getStartIndex() - 1 : dto.getStartIndex();
+
+        int totalPage = (int)Math.ceil((double)dto.getTotalResults() / dto.getItemsPerPage());
+        int startPage = (index / 5) * 5 + 1;
+        int endPage = (int)Math.ceil((double)index / 5) * 5;
+
+        if (endPage > totalPage) {
+            endPage = totalPage;
+        }
+
         Pagination pagination = Pagination.builder()
                 .currentPage(dto.getStartIndex())
                 .itemsPerPage(dto.getItemsPerPage())
-                .totalPage((int)Math.ceil((double)dto.getTotalResults() / dto.getItemsPerPage()))
+                .startPage(startPage)
+                .endPage(endPage)
+                .totalPage(totalPage)
                 .pagesPerView(Integer.parseInt(commonCodeService.getCommonCode(commonCodeList, "PagesPerView")))
                 .build();
+
 
         return pagination;
     }

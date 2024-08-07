@@ -52,7 +52,7 @@ public class Utility {
         connection.setRequestProperty("User-Agent", requestData.getUserAgent());
 
         // 응답 코드 가져오기, 성공 시 200 반환
-        int responseCode = connection.getResponseCode();
+        // int responseCode = connection.getResponseCode();
 
         // 응답 데이터를 읽을 수 있는 InputStream 객체 가져오기
         InputStream InputStream = connection.getInputStream();
