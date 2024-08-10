@@ -9,35 +9,45 @@
     <title>Title</title>
 
     <link href="/my/table.css" rel="stylesheet">
+    <link href="/my/mystyle.css" rel="stylesheet">
 </head>
 <body>
 <section layout:fragment="content">
-    <table class="table">
-        <thead>
-        <tr>
-            <th>글 제목</th>
-            <th>도서명</th>
-            <th>작성자</th>
-            <th>작성 날짜</th>
-        </tr>
-        </thead>
-        <tbody>
-
-        <div th:each="i : ${data}">
+    <div class="row">
+        <table class="table">
+            <thead>
             <tr>
-                <td>
-                    <div class="text-truncate max-width50" th:text="${i.title}">
-<!--                        @Html.ActionLink(item.Title, "Read", "Review", new { id = item.Id }, new { @class = "custom-link" })-->
-
-                    </div>
-                </td>
-                <td><div class="text-truncate max-width40" th:text="${i.bookName}"></div></td>
-                <td><div class="text-truncate max-width30" th:text="${i.UserId}"></div></td>
-                <td><div class="text-truncate max-width30" th:text="${i.CreateDate}"></div></td>
+                <th>글 제목</th>
+                <th>도서명</th>
+                <th>작성자</th>
+                <th>작성 날짜</th>
             </tr>
+            </thead>
+            <tbody>
+
+            <div th:each="i : ${data}">
+                <tr>
+                    <td>
+                        <div class="text-truncate max-width50" th:text="${i.title}">
+    <!--                        @Html.ActionLink(item.Title, "Read", "Review", new { id = item.Id }, new { @class = "custom-link" })-->
+                        </div>
+                    </td>
+                    <td><div class="text-truncate max-width40" th:text="${i.bookName}"></div></td>
+                    <td><div class="text-truncate max-width30" th:text="${i.UserId}"></div></td>
+                    <td><div class="text-truncate max-width30" th:text="${i.CreateDate}"></div></td>
+                </tr>
+            </div>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="row">
+        <div class="input-group">
+            <input type="text" id="searchText" class="form-control margin-right-10" placeholder="도서 검색" name="searchText">
+            <button class="btn btn-light btn-outline-dark me-2" type="submit" onclick="txtSearch_onClick()">검색</button>
+            <button class="btn btn-dark" onclick="location.href='/review/write'">리뷰 작성하기</button>
         </div>
-        </tbody>
-    </table>
+    </div>
 </section>
 </body>
 </html>

@@ -20,4 +20,9 @@ public class ReviewController {
         model.addAttribute("data", list);
         return "review/index.html";
     }
+
+    @GetMapping("/review/write")
+    public String write() {
+        return "review/write.html";
+    }
 }

@@ -122,15 +122,6 @@
 
             for (var i = pageObj.startPage; i < pageObj.endPage + 1; i++) {
                 const liElement = createPageElement(searchText, i, i);
-                // const liElement = document.createElement('li');
-                // liElement.classList.add('page-link');
-                // liElement.innerHTML = i;
-                
-                // // 클릭 이벤트 추가
-                // liElement.addEventListener('click', function() {
-                //     execPagination(searchText, this.innerHTML);
-                // });
-
                 ulElement.appendChild(liElement);
             }
 
